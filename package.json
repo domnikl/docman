@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --debug"
+  },
+  "main": "main.js",
+  "bin": "cli.js",
+  "devDependencies": {
+    "electron": "^12.0.2"
+  },
+  "dependencies": {
+    "devtron": "^1.4.0"
+  }
+}
