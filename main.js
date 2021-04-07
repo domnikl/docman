@@ -1,7 +1,12 @@
 const path = require("path");
-const { app, BrowserWindow } = require("electron");
+const fs = require("fs");
+const { app, BrowserWindow, ipcMain } = require("electron");
 
-const debug = /--debug/.test(process.argv[2])
+const debug = /--debug/.test(process.argv[2]);
+
+function sendFileListToBrowser(mainWindow, workingDir) {
+  mainWindow.webContents.send("file-list-reloaded", fs.readdirSync(workingDir));
+}
 
 function initialize() {
   makeSingleInstance();
@@ -14,21 +19,32 @@ function initialize() {
       title: app.getName(),
       webPreferences: {
         nodeIntegration: true,
+        contextIsolation: false,
       },
     });
 
     mainWindow.loadURL(path.join("file://", __dirname, "index.html"));
 
-    // Launch fullscreen with DevTools open, usage: npm run debug
-    if (debug) {
-      mainWindow.webContents.openDevTools();
-      mainWindow.maximize();
-      require("devtron").install();
-    }
-
     mainWindow.on("closed", () => {
       mainWindow = null;
     });
+
+    const workingDir = process.cwd();
+
+    fs.watch(workingDir, (e) => {
+      sendFileListToBrowser(mainWindow, workingDir);
+    });
+
+    mainWindow.webContents.on("dom-ready", () => {
+      sendFileListToBrowser(mainWindow, workingDir);
+    });
+
+    // Launch fullscreen with DevTools open, usage: npm run debug
+    if (debug) {
+      mainWindow.webContents.openDevTools();
+      //mainWindow.maximize();
+      require("devtron").install();
+    }
   }
 
   app.on("ready", () => {
