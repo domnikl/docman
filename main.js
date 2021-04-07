@@ -23,11 +23,7 @@ function initialize() {
       },
     });
 
-    mainWindow.loadURL(path.join("file://", __dirname, "index.html"));
-
-    mainWindow.on("closed", () => {
-      mainWindow = null;
-    });
+    mainWindow.loadURL(path.join("file://", __dirname, "dist/index.html"));
 
     const workingDir = process.cwd();
 
