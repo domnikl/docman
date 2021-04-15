@@ -1,6 +1,7 @@
 const React = require("react");
 
 import FileList from "./FileList";
+import PdfPreview from "./PdfPreview";
 
 const Main = () => {
   return (
@@ -21,6 +22,10 @@ const Main = () => {
         <div class="overflow-y-auto overflow-x-hidden flex-grow">
           <FileList />
         </div>
+      </div>
+
+      <div class="flex flex-col fixed left-64 h-full">
+        <PdfPreview />
       </div>
     </div>
   );
