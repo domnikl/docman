@@ -1,11 +1,42 @@
 const path = require("path");
 const fs = require("fs");
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, dialog, BrowserWindow, ipcMain } = require("electron");
 
 const debug = /--debug/.test(process.argv[2]);
+const settingsPath = path.join(app.getPath("userData"), "settings.json");
 
-function sendFileListToBrowser(mainWindow, workingDir) {
-  mainWindow.webContents.send("file-list-reloaded", fs.readdirSync(workingDir));
+function loadSettings() {
+  try {
+    return JSON.parse(fs.readFileSync(settingsPath));
+  } catch (error) {
+    return {
+      lastDir: process.cwd(),
+    };
+  }
+}
+
+function saveSettings(settings) {
+  fs.writeFileSync(settingsPath, JSON.stringify(settings));
+}
+
+const settings = loadSettings();
+let workingDir = settings.lastDir;
+let watcher = null;
+
+function sendFileListToBrowser(mainWindow) {
+  const files = fs.readdirSync(workingDir, {
+    withFileTypes: true,
+  });
+
+  const f = files.filter((file) => file.isFile()).map((file) => file.name);
+
+  mainWindow.webContents.send("file-list-reloaded", f);
+}
+
+function watchWorkingDir(mainWindow) {
+  return fs.watch(workingDir, (e) => {
+    sendFileListToBrowser(mainWindow, workingDir);
+  });
 }
 
 function initialize() {
@@ -18,6 +49,7 @@ function initialize() {
       height: 840,
       title: app.getName(),
       webPreferences: {
+        preload: path.join(__dirname, "preload.js"),
         nodeIntegration: true,
         contextIsolation: false,
       },
@@ -25,22 +57,31 @@ function initialize() {
 
     mainWindow.loadURL(path.join("file://", __dirname, "dist/index.html"));
 
-    const workingDir = process.cwd();
-
-    fs.watch(workingDir, (e) => {
-      sendFileListToBrowser(mainWindow, workingDir);
-    });
+    watcher = watchWorkingDir(mainWindow);
 
     mainWindow.webContents.on("dom-ready", () => {
-      sendFileListToBrowser(mainWindow, workingDir);
+      sendFileListToBrowser(mainWindow);
     });
 
     // Launch fullscreen with DevTools open, usage: npm run debug
     if (debug) {
       mainWindow.webContents.openDevTools();
-      //mainWindow.maximize();
-      require("devtron").install();
     }
+
+    ipcMain.on("select-dirs", async (event, arg) => {
+      const result = await dialog.showOpenDialog(mainWindow, {
+        properties: ["openDirectory"],
+      });
+
+      if (result.filePaths.length >= 1) {
+        if (watcher) watcher.close();
+        workingDir = result.filePaths[0];
+        settings.lastDir = workingDir;
+        saveSettings(settings);
+        sendFileListToBrowser(mainWindow);
+        watcher = watchWorkingDir(mainWindow);
+      }
+    });
   }
 
   app.on("ready", () => {

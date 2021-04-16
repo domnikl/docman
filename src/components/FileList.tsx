@@ -1,6 +1,8 @@
 const { ipcRenderer } = require("electron");
 const React = require("react");
 
+import ChooseDirectory from "./ChooseDirectory";
+
 class FileListState {
   fileList: string[];
 }
@@ -37,8 +39,11 @@ export default class FileList extends React.Component {
       <ul class="flex flex-col py-6 space-y-1">
         <li class="px-5">
           <div class="flex flex-row items-center h-8">
-            <div class="flex font-semibold text-sm text-gray-300 my-4 font-sans uppercase">
+            <div class="flex font-semibold text-sm text-gray-300 my-4 font-sans uppercase pr-1">
               Files
+            </div>
+            <div clas="flex justify-end">
+              <ChooseDirectory />
             </div>
           </div>
         </li>
