@@ -1,34 +1,30 @@
-const { ipcRenderer } = require("electron");
 const React = require("react");
 
 class ChooseDirectoryState {
   directory: string;
 }
 
+interface ChooseDirectoryProps {
+  onClick: () => void;
+}
+
 export default class ChooseDirectory extends React.Component {
   state: ChooseDirectoryState;
 
-  constructor(props) {
+  constructor(props: ChooseDirectoryProps) {
     super(props);
     this.state = { directory: "" };
+    this.handleSelectDirectory = this.handleSelectDirectory.bind(this);
   }
 
-  componentDidMount() {
-    ipcRenderer.on("file-list-reloaded", (_, data) => {
-      this.setState({ fileList: data });
-    });
-  }
-
-  chooseDir() {
-    window.postMessage({
-      type: "select-dirs",
-    });
+  handleSelectDirectory() {
+    this.props.onClick();
   }
 
   render() {
     return (
       <button
-        onClick={this.chooseDir}
+        onClick={this.handleSelectDirectory}
         class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-0.5 px-0.5 rounded inline-flex items-center"
       >
         <svg

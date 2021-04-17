@@ -1,32 +1,59 @@
 const React = require("react");
-
 import FileList from "./FileList";
 import PdfPreview from "./PdfPreview";
 
-const Main = () => {
-  return (
-    <div class="min-h-screen flex flex-row flex-auto flex-shrink-0 antialiased bg-gray-50 text-gray-800">
-      <div class="w-2/6 bg-gray-900 h-screen shadow-lg">
-        <div class="flex items-center pl-6 h-20 border-b border-gray-800">
-          <p class="text-md font-medium tracking-wide truncate text-gray-100 font-sans pr-2">
-            docman
-          </p>
-          <div class="badge">
-            <span class="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-blue-800 bg-blue-100 rounded-full">
-              Organizing
-            </span>
-          </div>
-        </div>
-        <div class="overflow-y-auto overflow-x-hidden flex-grow">
-          <FileList />
-        </div>
-      </div>
+class MainState {
+  selected: string = null;
+}
 
-      <div class="h-screen">
-        <PdfPreview />
-      </div>
-    </div>
-  );
-};
+interface MainProps {
+  workingDir: string;
+  fileNames: string[];
+  onSelectDirectory: () => void;
+}
 
-export default Main;
+export default class Main extends React.Component {
+  constructor(props: MainProps) {
+    super(props);
+    this.handleSelectDirectory = this.handleSelectDirectory.bind(this);
+    this.handleFileSelected = this.handleFileSelected.bind(this);
+    this.state = new MainState();
+  }
+
+  handleSelectDirectory() {
+    this.props.onSelectDirectory();
+  }
+
+  handleFileSelected(filePath: string) {
+    this.setState({ selected: filePath });
+  }
+
+  render() {
+    let preview = null;
+
+    if (this.state.selected != null) {
+      preview = (
+        <PdfPreview
+          filePath={`${this.props.workingDir}/${this.state.selected}`}
+        />
+      );
+    } else {
+      preview = "No file selected.";
+    }
+
+    return (
+      <div class="container">
+        <div class="sidebar">
+          <h1>docman</h1>
+          <FileList
+            fileNames={this.props.fileNames}
+            onChange={this.handleFileSelected}
+            onSelectDirectory={this.handleSelectDirectory}
+          />
+        </div>
+
+        <div class="main">{preview}</div>
+      </div>
+    );
+  }
+}

@@ -30,7 +30,10 @@ function sendFileListToBrowser(mainWindow) {
 
   const f = files.filter((file) => file.isFile()).map((file) => file.name);
 
-  mainWindow.webContents.send("file-list-reloaded", f);
+  mainWindow.webContents.send("file-list-reloaded", {
+    dir: workingDir,
+    fileNames: f,
+  });
 }
 
 function watchWorkingDir(mainWindow) {

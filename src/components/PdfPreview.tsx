@@ -17,9 +17,6 @@ export default class PdfPreview extends React.Component {
 
   constructor(props) {
     super(props);
-
-    //this.state.numPages = React.useState(null);
-    //this.state.pageNumber = React.useState(1);
     this.state = new PdfPreviewState(0, 1);
   }
 
@@ -28,12 +25,11 @@ export default class PdfPreview extends React.Component {
   }
 
   render() {
+    const filePath = "file://" + this.props.filePath;
+
     return (
       <div>
-        <Document
-          file="file:///home/dominik/Workspace/docman/test.pdf"
-          onLoadSuccess={this.onDocumentLoadSuccess}
-        >
+        <Document file={filePath} onLoadSuccess={this.onDocumentLoadSuccess}>
           <Page pageNumber={this.state.pageNumber} />
         </Document>
         <p>
