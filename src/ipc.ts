@@ -5,7 +5,10 @@ export function onFileListReloaded(fn) {
 }
 
 export function selectDirs() {
-  window.postMessage({
-    type: "select-dirs",
-  });
+  window.postMessage(
+    {
+      type: "select-dirs",
+    },
+    null
+  );
 }
