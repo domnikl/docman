@@ -44,7 +44,6 @@ export default class Main extends React.Component {
     return (
       <div class="container">
         <div class="sidebar">
-          <h1>docman</h1>
           <FileList
             fileNames={this.props.fileNames}
             onChange={this.handleFileSelected}

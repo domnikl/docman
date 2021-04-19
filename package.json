@@ -1,8 +1,8 @@
 {
   "scripts": {
     "start": "electron .",
-    "dev": "npm run build && electron . --debug",
-    "watch": "parcel src/index.html --public-url ./ --target node",
+    "dev": "electron . --debug",
+    "watch": "parcel watch src/index.html --public-url ./ --target node",
     "build": "parcel build src/index.html --public-url ./ --target node",
     "clean-build": "rm -rf build/ .cache dist/"
   },

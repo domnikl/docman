@@ -1,5 +1,8 @@
 :root {
-  --sidebar-text-color: #bebebe;
+  --text-color: #34373d;
+  --light-grey-color: #f4f4f4;
+  --light-blue: #9bd7ff;
+  --dark-blue: #003160;
 }
 
 html {
@@ -8,27 +11,27 @@ html {
 
 body {
   margin: 0;
-  color: rgb(32, 32, 32);
+  color: var(--text-color);
 }
 
 .container {
   display: flex;
   flex-direction: row;
   min-height: 100vh;
+  background: linear-gradient(109deg, var(--light-blue), var(--dark-blue));
+  color: var(--light-grey-color);
 }
 
 .sidebar,
 .main {
-  height: 100vh;
-  overflow: hidden;
   padding: 10px;
 }
 
 .sidebar {
   width: 25%;
-  color: var(--sidebar-text-color);
+  color: var(--text-color);
   box-shadow: 3px -10px 6px 0px rgb(33 33 33 / 35%);
-  background: linear-gradient(90deg, #182848 0%, #4b6cb7 100%);
+  background-color: var(--light-grey-color);
 }
 
 .sidebar ul {
@@ -38,26 +41,34 @@ body {
 }
 
 .sidebar a {
+  padding: 2px 0;
   text-decoration: none;
   text-overflow: ellipsis;
-  overflow: hidden;
+  overflow-x: hidden;
   white-space: nowrap;
-  color: var(--sidebar-text-color);
+  color: var(--text-color);
   width: 100%;
   display: block;
   line-height: 1.4em;
+}
+
+.sidebar a:hover {
+  background: white;
+}
+
+.sidebar a > svg {
+  width: 20px;
+  vertical-align: middle;
 }
 
 .file-list-heading {
   display: flex;
   flex-direction: row;
   align-items: baseline;
-}
-
-.file-list .choose-directory {
-  justify-content: end;
+  justify-content: space-between;
 }
 
 .main {
   padding: 10px;
+  text-align: center;
 }
