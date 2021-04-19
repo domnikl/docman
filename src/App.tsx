@@ -1,7 +1,12 @@
 const React = require("react");
 
 import Main from "./components/Main";
-import { onFileListReloaded, selectDirs } from "./ipc";
+import {
+  onFileRenamed,
+  onFileListReloaded,
+  renameFile,
+  selectDirs,
+} from "./ipc";
 
 class AppState {
   workingDir: string = null;
@@ -27,12 +32,22 @@ export default class App extends React.Component {
     selectDirs();
   }
 
+  handleRenameFile(
+    workingDir: string,
+    before: string,
+    after: string,
+    fn: () => void
+  ) {
+    renameFile(workingDir, before, after, fn);
+  }
+
   render() {
     return (
       <Main
         workingDir={this.state.workingDir}
         fileNames={this.state.fileNames}
         onSelectDirectory={this.handleSelectDirectory}
+        onRenameFile={this.handleRenameFile}
       />
     );
   }

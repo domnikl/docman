@@ -10,6 +10,12 @@ interface MainProps {
   workingDir: string;
   fileNames: string[];
   onSelectDirectory: () => void;
+  onRenameFile: (
+    workingDir: string,
+    before: string,
+    after: string,
+    fn: () => void
+  ) => void;
 }
 
 export default class Main extends React.Component {
@@ -17,6 +23,7 @@ export default class Main extends React.Component {
     super(props);
     this.handleSelectDirectory = this.handleSelectDirectory.bind(this);
     this.handleFileSelected = this.handleFileSelected.bind(this);
+    this.handleRenameFile = this.handleRenameFile.bind(this);
     this.state = new MainState();
   }
 
@@ -26,6 +33,10 @@ export default class Main extends React.Component {
 
   handleFileSelected(filePath: string) {
     this.setState({ selected: filePath });
+  }
+
+  handleRenameFile(before: string, after: string, fn: () => void) {
+    this.props.onRenameFile(this.props.workingDir, before, after, fn);
   }
 
   render() {
@@ -38,20 +49,21 @@ export default class Main extends React.Component {
         />
       );
     } else {
-      preview = "No file selected.";
+      preview = <div>No file selected.</div>;
     }
 
     return (
-      <div class="container">
-        <div class="sidebar">
+      <div className="container">
+        <div className="sidebar">
           <FileList
             fileNames={this.props.fileNames}
             onChange={this.handleFileSelected}
             onSelectDirectory={this.handleSelectDirectory}
+            onRenameFile={this.handleRenameFile}
           />
         </div>
 
-        <div class="main">{preview}</div>
+        <div className="main">{preview}</div>
       </div>
     );
   }

@@ -23,12 +23,22 @@ const settings = loadSettings();
 let workingDir = settings.lastDir;
 let watcher = null;
 
+function sortFiles(a, b) {
+  const statA = fs.statSync(a);
+  const statB = fs.statSync(b);
+
+  return statA.ctimeMs - statB.ctimeMs;
+}
+
 function sendFileListToBrowser(mainWindow) {
   const files = fs.readdirSync(workingDir, {
     withFileTypes: true,
   });
 
-  const f = files.filter((file) => file.isFile()).map((file) => file.name);
+  const f = files
+    .filter((file) => file.isFile())
+    .sort((a, b) => sortFiles)
+    .map((file) => file.name);
 
   mainWindow.webContents.send("file-list-reloaded", {
     dir: workingDir,
@@ -84,6 +94,18 @@ function initialize() {
         sendFileListToBrowser(mainWindow);
         watcher = watchWorkingDir(mainWindow);
       }
+    });
+
+    ipcMain.on("rename-file", async (event, args) => {
+      const oldFilePath = path.join(workingDir, args.before);
+      const newFilePath = path.join(workingDir, args.after);
+
+      fs.renameSync(oldFilePath, newFilePath);
+
+      mainWindow.webContents.send("file-renamed", {
+        before: args.before,
+        after: args.after,
+      });
     });
   }
 

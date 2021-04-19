@@ -3,6 +3,8 @@
   --light-grey-color: #f4f4f4;
   --light-blue: #9bd7ff;
   --dark-blue: #003160;
+  --input-border-color: #d9d9d9;
+  --highlight-color: rgb(220, 147, 31);
 }
 
 html {
@@ -22,16 +24,12 @@ body {
   color: var(--light-grey-color);
 }
 
-.sidebar,
-.main {
-  padding: 10px;
-}
-
 .sidebar {
   width: 25%;
   color: var(--text-color);
   box-shadow: 3px -10px 6px 0px rgb(33 33 33 / 35%);
   background-color: var(--light-grey-color);
+  padding: 10px;
 }
 
 .sidebar ul {
@@ -40,24 +38,29 @@ body {
   padding: 0;
 }
 
-.sidebar a {
-  padding: 2px 0;
-  text-decoration: none;
+.sidebar ul > li {
+  white-space: nowrap;
+  line-height: 1.4em;
   text-overflow: ellipsis;
   overflow-x: hidden;
-  white-space: nowrap;
-  color: var(--text-color);
-  width: 100%;
-  display: block;
-  line-height: 1.4em;
+  display: flex;
 }
 
-.sidebar a:hover {
+.sidebar ul > li:hover {
   background: white;
 }
 
-.sidebar a > svg {
+.sidebar a {
+  padding: 2px 0;
+  text-decoration: none;
+
+  color: var(--text-color);
+  width: 100%;
+}
+
+.sidebar svg {
   width: 20px;
+  flex: 0 0 20px;
   vertical-align: middle;
 }
 
@@ -71,4 +74,27 @@ body {
 .main {
   padding: 10px;
   text-align: center;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+}
+
+div.inline-input {
+  flex: auto;
+  display: flex;
+}
+
+div.inline-input > input {
+  flex: auto;
+}
+
+input[type="text"] {
+  border: 1px solid #d9d9d9;
+  border-radius: 0.3em;
+  padding: 5px;
+}
+
+input[type="text"]:active {
+  border-color: var(--highlight-color);
 }

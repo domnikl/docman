@@ -5,6 +5,8 @@ process.once("loaded", () => {
   window.addEventListener("message", (e) => {
     if (e.data.type === "select-dirs") {
       ipcRenderer.send("select-dirs");
+    } else if (e.data.type === "rename-file") {
+      ipcRenderer.send("rename-file", e.data);
     }
   });
 });
