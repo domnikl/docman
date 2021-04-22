@@ -1,12 +1,10 @@
 const React = require("react");
 const { useState } = require("react");
 
-import ChooseDirectory from "./ChooseDirectory";
 import RenameFile from "./RenameFile";
 
 interface FileListProps {
   fileNames: string[];
-  onSelectDirectory: () => void;
   onChange: (fileName: string) => void;
   onRenameFile: (before: string, after: string, fn: () => void) => void;
 }
@@ -37,10 +35,6 @@ export default function FileList(props: FileListProps) {
 
   const handleRenameAbort = () => {
     setEditingFile(undefined);
-  };
-
-  const handleSelectDirectory = () => {
-    props.onSelectDirectory();
   };
 
   const editFileName = (fileName: string) => {
@@ -88,15 +82,5 @@ export default function FileList(props: FileListProps) {
     </li>
   ));
 
-  return (
-    <div className="file-list">
-      <div className="file-list-heading">
-        <h2>Files</h2>
-        <div className="choose-directory">
-          <ChooseDirectory onClick={handleSelectDirectory} />
-        </div>
-      </div>
-      <ul className="file-list-items">{items}</ul>
-    </div>
-  );
+  return <ul className="file-list-items">{items}</ul>;
 }

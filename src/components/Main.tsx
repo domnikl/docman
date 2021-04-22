@@ -2,6 +2,7 @@ const React = require("react");
 const { useState } = require("react");
 import FileList from "./FileList";
 import PdfPreview from "./PdfPreview";
+import ChooseDirectory from "./ChooseDirectory";
 
 interface MainProps {
   workingDir: string;
@@ -29,10 +30,17 @@ export default function Main(props: MainProps) {
   return (
     <div className="container">
       <div className="sidebar">
+        <div className="file-list">
+          <div className="file-list-heading">
+            <h2>Files</h2>
+            <div className="choose-directory">
+              <ChooseDirectory onClick={props.onSelectDirectory} />
+            </div>
+          </div>
+        </div>
         <FileList
           fileNames={props.fileNames}
           onChange={(filePath: string) => setSelected(filePath)}
-          onSelectDirectory={props.onSelectDirectory}
           onRenameFile={(before, after, fn) =>
             props.onRenameFile(props.workingDir, before, after, fn)
           }
