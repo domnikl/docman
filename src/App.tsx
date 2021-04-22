@@ -1,54 +1,31 @@
 const React = require("react");
+const { useState, useEffect } = require("react");
 
 import Main from "./components/Main";
-import {
-  onFileRenamed,
-  onFileListReloaded,
-  renameFile,
-  selectDirs,
-} from "./ipc";
+import { onFileListReloaded, renameFile, selectDirs } from "./ipc";
 
 class AppState {
   workingDir: string = null;
   fileNames: string[] = [];
 }
 
-export default class App extends React.Component {
-  private state: AppState;
+export default function App(props) {
+  const [workingDir, setWorkingDir] = useState<string | undefined>(undefined);
+  const [fileNames, setFileNames] = useState([]);
 
-  constructor(props) {
-    super(props);
-    this.state = new AppState();
-    this.handleSelectDirectory = this.handleSelectDirectory.bind(this);
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     onFileListReloaded((_, data) => {
-      this.setState({ workingDir: data.dir, fileNames: data.fileNames });
+      setWorkingDir(data.dir);
+      setFileNames(data.fileNames);
     });
-  }
+  });
 
-  handleSelectDirectory() {
-    selectDirs();
-  }
-
-  handleRenameFile(
-    workingDir: string,
-    before: string,
-    after: string,
-    fn: () => void
-  ) {
-    renameFile(workingDir, before, after, fn);
-  }
-
-  render() {
-    return (
-      <Main
-        workingDir={this.state.workingDir}
-        fileNames={this.state.fileNames}
-        onSelectDirectory={this.handleSelectDirectory}
-        onRenameFile={this.handleRenameFile}
-      />
-    );
-  }
+  return (
+    <Main
+      workingDir={workingDir}
+      fileNames={fileNames}
+      onSelectDirectory={() => selectDirs()}
+      onRenameFile={renameFile}
+    />
+  );
 }

@@ -1,5 +1,6 @@
 const { ipcRenderer } = require("electron");
 const React = require("react");
+const { useState } = require("react");
 import { pdfjs, Document, Page } from "react-pdf";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -8,38 +9,28 @@ class DocumentLoadSuccess {
   numPages: Number;
 }
 
-class PdfPreviewState {
-  constructor(public numPages: Number, public pageNumber: Number) {}
+interface PdfPreviewProps {
+  filePath: string;
 }
 
-export default class PdfPreview extends React.Component {
-  state: PdfPreviewState;
+export default function PdfPreview(props: PdfPreviewProps) {
+  const filePath = "file://" + props.filePath;
+  const [numPages, setNumPages] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
 
-  constructor(props) {
-    super(props);
-    this.state = new PdfPreviewState(0, 1);
-    this.handleDocumentLoadSuccess = this.handleDocumentLoadSuccess.bind(this);
-  }
-
-  handleDocumentLoadSuccess(success: DocumentLoadSuccess) {
-    this.setState({ numPages: success.numPages });
-  }
-
-  render() {
-    const filePath = "file://" + this.props.filePath;
-
-    return (
-      <div>
-        <Document
-          file={filePath}
-          onLoadSuccess={this.handleDocumentLoadSuccess}
-        >
-          <Page pageNumber={this.state.pageNumber} />
-        </Document>
-        <p>
-          Page {this.state.pageNumber} of {this.state.numPages}
-        </p>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Document
+        file={filePath}
+        onLoadSuccess={(success: DocumentLoadSuccess) =>
+          setNumPages(success.numPages)
+        }
+      >
+        <Page pageNumber={pageNumber} />
+      </Document>
+      <p>
+        Page {pageNumber} of {numPages}
+      </p>
+    </div>
+  );
 }

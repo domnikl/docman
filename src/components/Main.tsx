@@ -1,10 +1,7 @@
 const React = require("react");
+const { useState } = require("react");
 import FileList from "./FileList";
 import PdfPreview from "./PdfPreview";
-
-class MainState {
-  selected: string = null;
-}
 
 interface MainProps {
   workingDir: string;
@@ -18,53 +15,31 @@ interface MainProps {
   ) => void;
 }
 
-export default class Main extends React.Component {
-  constructor(props: MainProps) {
-    super(props);
-    this.handleSelectDirectory = this.handleSelectDirectory.bind(this);
-    this.handleFileSelected = this.handleFileSelected.bind(this);
-    this.handleRenameFile = this.handleRenameFile.bind(this);
-    this.state = new MainState();
+export default function Main(props: MainProps) {
+  const [selected, setSelected] = useState(undefined);
+
+  let preview = null;
+
+  if (selected != null) {
+    preview = <PdfPreview filePath={`${props.workingDir}/${selected}`} />;
+  } else {
+    preview = <div>No file selected.</div>;
   }
 
-  handleSelectDirectory() {
-    this.props.onSelectDirectory();
-  }
-
-  handleFileSelected(filePath: string) {
-    this.setState({ selected: filePath });
-  }
-
-  handleRenameFile(before: string, after: string, fn: () => void) {
-    this.props.onRenameFile(this.props.workingDir, before, after, fn);
-  }
-
-  render() {
-    let preview = null;
-
-    if (this.state.selected != null) {
-      preview = (
-        <PdfPreview
-          filePath={`${this.props.workingDir}/${this.state.selected}`}
+  return (
+    <div className="container">
+      <div className="sidebar">
+        <FileList
+          fileNames={props.fileNames}
+          onChange={(filePath: string) => setSelected(filePath)}
+          onSelectDirectory={props.onSelectDirectory}
+          onRenameFile={(before, after, fn) =>
+            props.onRenameFile(props.workingDir, before, after, fn)
+          }
         />
-      );
-    } else {
-      preview = <div>No file selected.</div>;
-    }
-
-    return (
-      <div className="container">
-        <div className="sidebar">
-          <FileList
-            fileNames={this.props.fileNames}
-            onChange={this.handleFileSelected}
-            onSelectDirectory={this.handleSelectDirectory}
-            onRenameFile={this.handleRenameFile}
-          />
-        </div>
-
-        <div className="main">{preview}</div>
       </div>
-    );
-  }
+
+      <div className="main">{preview}</div>
+    </div>
+  );
 }

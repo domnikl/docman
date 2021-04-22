@@ -6,7 +6,7 @@ Electron app to preview and fast rename PDFs to get your documents sorted.
 
 ```sh
 # run with dev tools open & rebuild in background
-npm run watch &; num run dev
+npm run watch &; npm run dev
 ```
 
 ## Packaging
