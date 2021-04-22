@@ -1,4 +1,5 @@
 const React = require("react");
+const path = require("path");
 
 interface RenameFileProps {
   fileName: string;
@@ -7,9 +8,11 @@ interface RenameFileProps {
 }
 
 export default function RenameFile(props: RenameFileProps) {
+  const parsedPath = path.parse(props.fileName);
+
   const handleKeyUp = (e) => {
     const before = e.target.dataset.originalName;
-    const after = e.target.value;
+    const after = e.target.value + parsedPath.ext;
 
     if (e.key == "Enter") {
       props.onChange(before, after);
@@ -23,11 +26,12 @@ export default function RenameFile(props: RenameFileProps) {
       <input
         type="text"
         data-original-name={props.fileName}
-        defaultValue={props.fileName}
+        defaultValue={parsedPath.name}
         name="file"
         onKeyUp={handleKeyUp}
         autoFocus
       />
+      <span>{parsedPath.ext}</span>
     </div>
   );
 }

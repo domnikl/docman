@@ -7,6 +7,7 @@ interface FileListProps {
   fileNames: string[];
   onChange: (fileName: string) => void;
   onRenameFile: (before: string, after: string, fn: () => void) => void;
+  onRenameFileAbort: () => void;
 }
 
 export default function FileList(props: FileListProps) {
@@ -35,6 +36,7 @@ export default function FileList(props: FileListProps) {
 
   const handleRenameAbort = () => {
     setEditingFile(undefined);
+    props.onRenameFileAbort();
   };
 
   const editFileName = (fileName: string) => {

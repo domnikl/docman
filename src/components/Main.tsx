@@ -44,6 +44,7 @@ export default function Main(props: MainProps) {
           onRenameFile={(before, after, fn) =>
             props.onRenameFile(props.workingDir, before, after, fn)
           }
+          onRenameFileAbort={() => setSelected(undefined)}
         />
       </div>
 
