@@ -1,11 +1,7 @@
 const { ipcRenderer } = require("electron");
 
-export function onFileListReloaded(fn) {
+export function onFileListReloaded(fn: (e: any, data: FileList) => void) {
   ipcRenderer.on("file-list-reloaded", fn);
-}
-
-export function onFileRenamed(fn) {
-  ipcRenderer.on("file-renamed", fn);
 }
 
 export function selectDirs() {

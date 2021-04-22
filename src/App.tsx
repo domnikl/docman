@@ -4,17 +4,12 @@ const { useState, useEffect } = require("react");
 import Main from "./components/Main";
 import { onFileListReloaded, renameFile, selectDirs } from "./ipc";
 
-class AppState {
-  workingDir: string = null;
-  fileNames: string[] = [];
-}
-
-export default function App(props) {
+export default function App() {
   const [workingDir, setWorkingDir] = useState<string | undefined>(undefined);
   const [fileNames, setFileNames] = useState([]);
 
   useEffect(() => {
-    onFileListReloaded((_, data) => {
+    onFileListReloaded((e: any, data: FileList) => {
       setWorkingDir(data.dir);
       setFileNames(data.fileNames);
     });
