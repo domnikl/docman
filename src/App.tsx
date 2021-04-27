@@ -12,6 +12,8 @@ export default function App() {
     onFileListReloaded((e: any, data: FileList) => {
       setWorkingDir(data.dir);
       setFileNames(data.fileNames);
+
+      document.title = "docman: " + data.dir;
     });
   });
 

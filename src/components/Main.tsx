@@ -33,9 +33,10 @@ export default function Main(props: MainProps) {
         <div className="file-list">
           <div className="file-list-heading">
             <h2>Files</h2>
-            <div className="choose-directory">
-              <ChooseDirectory onClick={props.onSelectDirectory} />
-            </div>
+            <ChooseDirectory
+              selected={props.workingDir}
+              onClick={props.onSelectDirectory}
+            />
           </div>
         </div>
         <FileList

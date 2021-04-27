@@ -1,6 +1,7 @@
 :root {
   --text-color: #34373d;
   --light-grey-color: #f4f4f4;
+  --dark-grey-color: rgb(140, 140, 140);
   --light-blue: #9bd7ff;
   --dark-blue: #003160;
   --input-border-color: #d9d9d9;
@@ -51,24 +52,14 @@ body {
 }
 
 .sidebar a {
-  padding: 2px 0;
   text-decoration: none;
-
   color: var(--text-color);
-  width: 100%;
 }
 
 .sidebar svg {
-  width: 20px;
-  flex: 0 0 20px;
+  width: 24px;
+  flex: 0 0 24px;
   vertical-align: middle;
-}
-
-.file-list-heading {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
 }
 
 .main {
@@ -97,4 +88,48 @@ input[type="text"] {
 
 input[type="text"]:active {
   border-color: var(--highlight-color);
+}
+
+.file-list-heading {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.file-list-heading h2 {
+  flex-grow: 1;
+}
+
+.directory-chooser {
+  margin-left: 10px;
+  flex-grow: 5;
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.directory-chooser > div {
+  padding: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: rtl;
+  text-align: left;
+  flex-flow: nowrap;
+}
+
+.directory-chooser div:first-child {
+  font-size: 0.8em;
+}
+
+.directory-chooser div:nth-child(2) {
+  min-width: 24px;
+}
+
+.directory-chooser a {
+  color: var(--dark-grey-color);
+}
+.directory-chooser a > svg {
+  color: var(--text-color);
 }
