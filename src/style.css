@@ -73,6 +73,7 @@ body {
   justify-content: space-around;
   align-items: center;
   flex-direction: column;
+  overflow: hidden;
 }
 
 div.inline-input {
@@ -138,7 +139,8 @@ input[type="text"]:active {
   color: var(--text-color);
 }
 
-.main canvas {
+.main canvas,
+.react-pdf__Page {
   /*width: 100% !important;*/
   height: calc(100vh - 5rem) !important;
   width: auto !important;
