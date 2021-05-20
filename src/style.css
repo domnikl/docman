@@ -26,7 +26,8 @@ body {
 }
 
 .sidebar {
-  width: 25%;
+  width: 35vw;
+  min-width: 200px;
   color: var(--text-color);
   box-shadow: 3px -10px 6px 0px rgb(33 33 33 / 35%);
   background-color: var(--light-grey-color);
@@ -54,6 +55,8 @@ body {
 .sidebar a {
   text-decoration: none;
   color: var(--text-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sidebar svg {

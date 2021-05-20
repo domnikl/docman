@@ -19,6 +19,7 @@ export default function PdfPreview(props: PdfPreviewProps) {
   const [pageNumber, setPageNumber] = useState(1);
 
   const handleClick = (e) => {
+    console.log(e);
     const width = e.nativeEvent.target.width;
     const offsetX = e.nativeEvent.offsetX;
 
